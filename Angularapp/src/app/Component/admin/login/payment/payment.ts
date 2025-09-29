@@ -8,7 +8,7 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './payment.html',
   styleUrl: './payment.css'
 })
-export class Payment {
+export class PaymentComponent {
   method: 'upi' | 'card' = 'upi';
   isProcessing: boolean = false;
 

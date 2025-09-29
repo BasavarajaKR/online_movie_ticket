@@ -30,7 +30,7 @@ interface Showtime {
 
 @Component({
   selector: 'app-movie',
-  imports: [CommonModule, FormsModule, NavbarComponent],
+  imports: [CommonModule, FormsModule],
   templateUrl: './movie.component.html',
   styleUrl: './movie.component.css'
 })

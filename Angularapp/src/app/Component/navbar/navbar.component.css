@@ -1,14 +1,15 @@
 .navbar {
-  background: rgb(87, 77, 97);
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
   padding: 15px 30px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   position: sticky;
   top: 0;
   z-index: 1000;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   color: white;
 }
 

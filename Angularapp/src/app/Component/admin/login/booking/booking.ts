@@ -40,7 +40,7 @@ interface SeatRow {
   templateUrl: './booking.html',
   styleUrl: './booking.css'
 })
-export class Booking implements OnInit, OnDestroy {
+export class BookingComponent implements OnInit, OnDestroy {
   currentUser: string = 'Admin User';
   currentYear: number = new Date().getFullYear();
   selectedMovie: Movie | null = null;
