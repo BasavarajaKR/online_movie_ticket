@@ -1,0 +1,132 @@
+<!-- User Navbar -->
+<app-navbar></app-navbar>
+
+<!-- Landing Hero: Premium gradient-black with 3 auto sliding banners -->
+<section class="landing-hero">
+  <div class="carousel">
+    <div class="slides">
+      <div class="slide">
+        <img src="https://images.unsplash.com/photo-1535016120720-40c646be5580?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8bW92aWV8ZW58MHx8MHx8fDA%3D" alt="Blockbuster Deals">
+        <div class="overlay">
+          <span class="offer-badge">Flat 30% OFF</span>
+          <h1 class="headline">Blockbuster Week</h1>
+          <p class="subtext">Exclusive savings on top releases. Limited time only.</p>
+        </div>
+      </div>
+      <div class="slide">
+        <img src="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=1920&auto=format&fit=crop" alt="Premium Experience">
+        <div class="overlay">
+          <span class="offer-badge gold">Buy 1 Get 1</span>
+          <h1 class="headline">Premium Seats • Dolby Atmos</h1>
+          <p class="subtext">Feel every moment in stunning sound and comfort.</p>
+        </div>
+      </div>
+      <div class="slide">
+        <img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=1920&auto=format&fit=crop" alt="Early Bird Offer">
+        <div class="overlay">
+          <span class="offer-badge green">Early Bird 20%</span>
+          <h1 class="headline">Book Early • Save More</h1>
+          <p class="subtext">Morning shows now with special pricing and perks.</p>
+        </div>
+      </div>
+    </div>
+    <div class="dots" aria-hidden="true">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</section>
+
+<!-- Movie Theatres: 8 location cards grid with click-to-reveal theatres -->
+
+<!-- Horizontal movie slider: single-line, auto-scrolling with hover pause -->
+<section class="movie-rail">
+  <div class="rail-header">
+    <h2>Now Trending</h2>
+  </div>
+  <div class="rail-viewport">
+    <div class="card-track">
+      <div *ngFor="let movie of filteredMovies" class="rail-card" (click)="selectMovie(movie)">
+        <div class="poster-wrap">
+          <img [src]="movie.poster" [alt]="movie.title" />
+          <div class="badge">
+            <span class="star">★</span>
+            <span class="score">{{ movie.rating }}</span>
+          </div>
+        </div>
+        <div class="rail-info">
+          <h3 class="title">{{ movie.title }}</h3>
+          <div class="meta">{{ movie.genre }}</div>
+        </div>
+      </div>
+      <!-- duplicate to achieve seamless loop -->
+      <div *ngFor="let movie of filteredMovies" class="rail-card clone" (click)="selectMovie(movie)">
+        <div class="poster-wrap">
+          <img [src]="movie.poster" [alt]="movie.title" />
+          <div class="badge">
+            <span class="star">★</span>
+            <span class="score">{{ movie.rating }}</span>
+          </div>
+        </div>
+        <div class="rail-info">
+          <h3 class="title">{{ movie.title }}</h3>
+          <div class="meta">{{ movie.genre }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="theatres-section">
+  <div class="theatres-header">
+    <h2>Movie Theatres</h2>
+    <div class="header-actions">
+      <label class="dropdown-label" for="locSelect">Location</label>
+      <select id="locSelect" class="location-select" [(ngModel)]="selectedLocationName" (change)="onLocationDropdownChange()">
+        <option value="">Select location</option>
+        <option *ngFor="let loc of locations" [value]="loc.name">{{ loc.name }}</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="location-rail-viewport">
+    <div class="location-rail-track">
+      <div class="location-card small" *ngFor="let loc of locations" (click)="selectLocation(loc)">
+        <div class="loc-image-wrap small">
+          <img [src]="loc.image" [alt]="loc.name" />
+          <div class="loc-overlay"></div>
+          <div class="loc-name">{{ loc.name }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="theatre-list" *ngIf="selectedLocation as active">
+    <div class="list-header">
+      <h3>{{ active.name }} Theatres</h3>
+      <button class="close-list" (click)="clearSelectedLocation()">✕</button>
+    </div>
+    <ul>
+      <li *ngFor="let t of active.theatres">
+        <span class="theatre-dot"></span>
+        <span class="theatre-name">{{ t }}</span>
+      </li>
+    </ul>
+  </div>
+</section>
+
+
+<!-- Footer -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="brand">🎬 CinePrime</div>
+    <div class="links">
+      <a href="#">About</a>
+      <a href="#">Support</a>
+      <a href="#">Terms</a>
+      <a href="#">Privacy</a>
+    </div>
+    <div class="copy">© {{ currentYear }} CinePrime. All rights reserved.</div>
+  </div>
+  <div class="footer-glow" aria-hidden="true"></div>
+</footer>

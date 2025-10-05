@@ -1,0 +1,15 @@
+<div class="admin-layout" *ngIf="isAuthenticated$ | async">
+  <!-- Admin Navigation -->
+  <app-admin-nav></app-admin-nav>
+  
+  <!-- Main Content Area -->
+  <main class="admin-content">
+    <ng-content></ng-content>
+  </main>
+</div>
+
+<!-- Loading state -->
+<div class="loading-container" *ngIf="!(isAuthenticated$ | async)">
+  <div class="loading-spinner"></div>
+  <p>Loading...</p>
+</div>

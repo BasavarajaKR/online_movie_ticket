@@ -1,0 +1,59 @@
+<app-admin-layout>
+  <div class="movie-management">
+    <div class="movie-header">
+      <div>
+        <h1>Movie Management</h1>
+        <p>Manage movies, showtimes, and movie details</p>
+      </div>
+      <button class="btn-add" (click)="toggleAddForm()">
+        <span class="btn-icon">➕</span>
+        {{ showAddForm ? 'Close' : 'Add New Movie' }}
+      </button>
+    </div>
+
+    <!-- Add/Edit Movie Form -->
+    <div class="movie-form" *ngIf="showAddForm">
+      <h3>{{ editingMovieId ? 'Edit Movie' : 'Add New Movie' }}</h3>
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="title">Title</label>
+          <input id="title" [(ngModel)]="newMovie.title" class="form-input" placeholder="Movie title" />
+        </div>
+        <div class="form-group">
+          <label for="genre">Genre</label>
+          <input id="genre" [(ngModel)]="newMovie.genre" class="form-input" placeholder="Action, Drama" />
+        </div>
+        <div class="form-group">
+          <label for="duration">Duration (min)</label>
+          <input id="duration" type="number" [(ngModel)]="newMovie.durationMinutes" class="form-input" />
+        </div>
+        <div class="form-group">
+          <label for="poster">Poster URL (optional)</label>
+          <input id="poster" [(ngModel)]="newMovie.poster" class="form-input" placeholder="https://..." />
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn-save" (click)="saveMovie()">{{ editingMovieId ? 'Update' : 'Save' }}</button>
+        <button class="btn-cancel" (click)="toggleAddForm()">Cancel</button>
+      </div>
+    </div>
+
+    <div class="movie-grid">
+      <div class="movie-card" *ngFor="let movie of movies">
+        <div class="movie-poster">
+          <img *ngIf="movie.poster" [src]="movie.poster" [alt]="movie.title" />
+          <div *ngIf="!movie.poster" class="placeholder-poster">🎬</div>
+        </div>
+        <div class="movie-info">
+          <h3>{{ movie.title }}</h3>
+          <p>{{ movie.genre }}</p>
+          <span class="duration">{{ movie.durationMinutes }} min</span>
+        </div>
+        <div class="movie-actions">
+          <button class="btn-edit" (click)="editMovie(movie)">Edit</button>
+          <button class="btn-delete" (click)="deleteMovie(movie)">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-admin-layout>

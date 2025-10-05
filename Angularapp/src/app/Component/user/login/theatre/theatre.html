@@ -1,0 +1,164 @@
+<app-navbar></app-navbar>
+<div class="theatre-container">
+  <div class="header">
+    <h2>Browse Theatres</h2>
+    <div class="chips">
+      <span class="chip">Bengaluru</span>
+      <span class="chip">IMAX</span>
+      <span class="chip">Dolby</span>
+    </div>
+  </div>
+
+  <div class="theatre-grid">
+    <div class="theatre-card" *ngFor="let t of theatres; let i = index">
+      <div class="theatre-card-header">
+        <h3 class="title" title="{{t.name}}">{{ t.name }}</h3>
+        <span class="screens">{{ t.totalScreens }} Screens</span>
+      </div>
+      <p class="address">{{ t.address }}, {{ t.city }}, {{ t.state }} - {{ t.zipCode }}</p>
+      <div class="meta">
+        <span>📞 {{ t.phone }}</span>
+      </div>
+      <div class="pricing-info">
+        <div class="price-range">
+          <span class="price-label">Ticket Price:</span>
+          <span class="price-range-text">₹{{ getScreenPrice(i, 'JUNIOR') }} - ₹{{ getScreenPrice(i, 'IMAX') }}</span>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn primary" (click)="viewShows(i)">{{ expandedTheatreIndex === i ? 'Hide Shows' : 'View Shows' }}</button>
+        <!-- <button class="btn">Get Directions</button> -->
+      </div>
+      <div class="shows-panel" *ngIf="expandedTheatreIndex === i">
+        <div class="date-strip">
+          <button class="date-pill" *ngFor="let d of dates" [class.active]="d.value===selectedDate" (click)="selectDate(d.value)">
+            <span class="week">{{ d.week }}</span>
+            <span class="day">{{ d.day }}</span>
+          </button>
+        </div>
+
+        <div class="screen-shows" *ngFor="let s of screens">
+          <div class="screen-row">
+            <span class="screen-badge">{{ s }}</span>
+            <div class="times">
+              <button class="time-chip" *ngFor="let time of showTimesPerScreen[s]" (click)="selectShow(t.name, s, time)">{{ time }}</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="seat-section" *ngIf="selectedShow && expandedTheatreIndex === i">
+          <div class="seat-header">
+            <div class="selected-info">
+              <strong>{{ selectedShow.theatreName }}</strong>
+              <span>• {{ selectedShow.screen }}</span>
+              <span>• {{ selectedShow.time }}</span>
+              <span>• {{ selectedShow.date }}</span>
+            </div>
+            <div class="legend">
+              <span class="legend-item"><span class="seat-box available"></span>Available</span>
+              <span class="legend-item"><span class="seat-box selected"></span>Selected</span>
+              <span class="legend-item"><span class="seat-box booked"></span>Booked</span>
+            </div>
+          </div>
+
+          <!-- Seat Selection Modal -->
+          <div class="seat-modal-overlay" *ngIf="selectedShow && !isSeatCountSet">
+            <div class="seat-modal">
+              <div class="modal-header">
+                <h3>How many seats?</h3>
+              </div>
+              
+              <div class="modal-content">
+                <!-- Scooter Illustration -->
+                <div class="scooter-illustration">
+                  <div class="scooter">
+                    <div class="scooter-body"></div>
+                    <div class="scooter-wheels">
+                      <div class="wheel front"></div>
+                      <div class="wheel back"></div>
+                    </div>
+                    <div class="headlight"></div>
+                  </div>
+                </div>
+
+                <!-- Seat Count Selection -->
+                <div class="seat-count-selection">
+                  <div class="seat-numbers">
+                    <button 
+                      *ngFor="let num of [1,2,3,4,5,6,7,8,9,10]" 
+                      class="seat-number-btn"
+                      [class.selected]="numberOfSeatsToSelect === num"
+                      (click)="numberOfSeatsToSelect = num">
+                      {{ num }}
+                    </button>
+                  </div>
+                </div>
+
+
+                <!-- Bestseller Option -->
+                <div class="bestseller-option">
+                  <label class="bestseller-checkbox">
+                    <input type="checkbox" [(ngModel)]="bestsellerSeats">
+                    <span class="checkmark"></span>
+                    Book the Bestseller Seats in this cinema at no extra cost!
+                  </label>
+                </div>
+
+                <!-- Select Seats Button -->
+                <button 
+                  class="select-seats-btn"
+                  (click)="setSeatCount(numberOfSeatsToSelect)"
+                  [disabled]="numberOfSeatsToSelect < 1">
+                  Select Seats
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Seat Selection Status -->
+          <div class="seat-status" *ngIf="isSeatCountSet">
+            <div class="status-info">
+              <span class="status-item">
+                <strong>Seats to select:</strong> {{ numberOfSeatsToSelect }}
+              </span>
+              <span class="status-item">
+                <strong>Selected:</strong> {{ totalSelectedSeats }}
+              </span>
+              <span class="status-item">
+                <strong>Remaining:</strong> {{ remainingSeatsToSelect }}
+              </span>
+            </div>
+            <div class="status-message" [class.complete]="remainingSeatsToSelect === 0">
+              <span *ngIf="remainingSeatsToSelect > 0">
+                Please select {{ remainingSeatsToSelect }} more seat(s)
+              </span>
+              <span *ngIf="remainingSeatsToSelect === 0">
+                ✅ All seats selected! Redirecting to payment...
+              </span>
+            </div>
+            <div class="action-buttons" *ngIf="remainingSeatsToSelect > 0">
+              <button class="btn secondary" (click)="isSeatCountSet = false; clearAllSelections()">
+                Change Seat Count
+              </button>
+            </div>
+          </div>
+
+          <div class="seat-map">
+            <div class="seat-row" *ngFor="let row of seatRows; let r = index">
+              <span class="row-label">{{ row.letter }}</span>
+              <div class="seats">
+                <button class="seat" *ngFor="let seat of row.seats; let s = index"
+                        [class.booked]="seat.booked"
+                        [class.selected]="seat.selected"
+                        (click)="toggleSeat(r, s)">
+                  {{ seat.number | number: '2.0' }}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

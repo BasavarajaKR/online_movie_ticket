@@ -1,0 +1,391 @@
+.theatre-container{
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.chips{display:flex;gap:8px}
+.chip{background:#fff;border:1px solid #e5e7eb;padding:6px 10px;border-radius:999px;font-weight:600;color:#374151}
+
+.theatre-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.theatre-card{background:#fff;border:1px solid #eef0f3;border-radius:14px;padding:18px;box-shadow:0 10px 24px rgba(0,0,0,.06);transition:transform .2s ease,box-shadow .2s ease}
+.theatre-card:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(0,0,0,.12)}
+.theatre-card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.title{margin:0;font-size:1.2rem;font-weight:800;color:#111827;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70%}
+.screens{background:#f3f4f6;border-radius:8px;padding:4px 8px;font-weight:700;color:#374151}
+.address{margin:6px 0 10px 0;color:#4b5563}
+.meta{color:#6b7280;font-weight:600;margin-bottom:12px}
+
+/* Pricing Information */
+.pricing-info {
+  background: #f8fafc;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 12px;
+  border: 1px solid #e2e8f0;
+}
+
+.price-range {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.price-label {
+  font-weight: 600;
+  color: #374151;
+  font-size: 0.9rem;
+}
+
+.price-range-text {
+  font-weight: 700;
+  color: #059669;
+  font-size: 0.95rem;
+}
+
+.actions{display:flex;gap:10px}
+.btn{background:#fff;border:1px solid #e5e7eb;padding:10px 14px;border-radius:10px;font-weight:700;color:#374151;cursor:pointer}
+.btn.primary{background:#e71a0f;color:#fff;border-color:#e71a0f}
+.btn:hover{box-shadow:0 8px 18px rgba(0,0,0,.12)}
+
+@media (max-width: 900px){
+  .theatre-grid{grid-template-columns:1fr}
+}
+
+/* Shows panel */
+.shows-panel{margin-top:14px;border-top:1px solid #eef0f3;padding-top:12px}
+.date-strip{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px}
+.date-pill{display:flex;flex-direction:column;align-items:center;justify-content:center;width:64px;min-width:64px;height:56px;border-radius:12px;border:1px solid #e5e7eb;background:#fff;color:#374151;font-weight:800;cursor:pointer}
+.date-pill .week{font-size:.75rem;color:#6b7280;font-weight:700}
+.date-pill .day{font-size:1.1rem}
+.date-pill.active{background:#111827;color:#fff;border-color:#111827}
+
+.screen-row{display:flex;align-items:center;gap:12px;margin:12px 0}
+.screen-badge{background:#f3f4f6;color:#374151;border-radius:999px;padding:6px 10px;font-weight:900}
+.times{display:flex;flex-wrap:wrap;gap:8px}
+.time-chip{background:#fff;border:1px solid #16a34a;color:#16a34a;border-radius:8px;padding:8px 12px;font-weight:800;cursor:pointer}
+.time-chip:hover{background:#16a34a;color:#fff}
+
+/* Seat section */
+.seat-section{margin-top:12px;border-top:1px dashed #e5e7eb;padding-top:12px}
+.seat-header{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
+.selected-info{display:flex;gap:8px;align-items:center;font-weight:800;color:#111827}
+.legend{display:flex;gap:12px;align-items:center;color:#4b5563;font-weight:700}
+.legend-item{display:flex;gap:6px;align-items:center}
+.seat-box{width:14px;height:14px;border-radius:4px;border:1px solid #d1d5db;display:inline-block}
+.seat-box.available{background:#fff}
+.seat-box.selected{background:#16a34a;border-color:#16a34a}
+.seat-box.booked{background:#eab308;border-color:#eab308}
+
+.seat-map{border:1px solid #eef0f3;border-radius:12px;padding:12px;background:#fff}
+.seat-row{display:flex;align-items:center;gap:10px;margin:6px 0}
+.row-label{width:24px;text-align:center;font-weight:800;color:#6b7280}
+.seats{display:flex;flex-wrap:wrap;gap:6px}
+.seat{min-width:36px;height:32px;border:1px solid #16a34a;background:#fff;color:#16a34a;border-radius:6px;font-weight:800;cursor:pointer}
+.seat.selected{background:#16a34a;color:#fff}
+.seat.booked{background:#eab308;color:#fff;border-color:#eab308;cursor:not-allowed}
+
+/* Seat Modal Styles */
+.seat-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.seat-modal {
+  background: white;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 450px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.modal-header {
+  padding: 24px 24px 0 24px;
+  text-align: center;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.modal-content {
+  padding: 20px 24px 24px 24px;
+}
+
+/* Scooter Illustration */
+.scooter-illustration {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0 30px 0;
+}
+
+.scooter {
+  position: relative;
+  width: 80px;
+  height: 60px;
+}
+
+.scooter-body {
+  width: 60px;
+  height: 30px;
+  background: #fff;
+  border-radius: 15px;
+  position: absolute;
+  top: 15px;
+  left: 10px;
+  border: 2px solid #333;
+}
+
+.scooter-wheels {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.wheel {
+  width: 20px;
+  height: 20px;
+  background: #87CEEB;
+  border-radius: 50%;
+  position: absolute;
+  border: 2px solid #333;
+}
+
+.wheel.front {
+  top: 35px;
+  left: 15px;
+}
+
+.wheel.back {
+  top: 35px;
+  right: 15px;
+}
+
+.headlight {
+  width: 8px;
+  height: 8px;
+  background: #FFD700;
+  border-radius: 50%;
+  position: absolute;
+  top: 20px;
+  left: 5px;
+  box-shadow: 0 0 10px #FFD700;
+}
+
+/* Seat Count Selection */
+.seat-count-selection {
+  margin: 20px 0;
+}
+
+.seat-numbers {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.seat-number-btn {
+  width: 45px;
+  height: 45px;
+  border: 2px solid #e5e7eb;
+  background: white;
+  border-radius: 50%;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.seat-number-btn:hover {
+  border-color: #e71a0f;
+  color: #e71a0f;
+}
+
+.seat-number-btn.selected {
+  background: #e71a0f;
+  border-color: #e71a0f;
+  color: white;
+}
+
+
+/* Bestseller Option */
+.bestseller-option {
+  margin: 20px 0;
+}
+
+.bestseller-checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: #374151;
+  line-height: 1.4;
+}
+
+.bestseller-checkbox input[type="checkbox"] {
+  display: none;
+}
+
+.checkmark {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #d1d5db;
+  border-radius: 4px;
+  position: relative;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.bestseller-checkbox input[type="checkbox"]:checked + .checkmark {
+  background: #e71a0f;
+  border-color: #e71a0f;
+}
+
+.bestseller-checkbox input[type="checkbox"]:checked + .checkmark::after {
+  content: '✓';
+  position: absolute;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Select Seats Button */
+.select-seats-btn {
+  width: 100%;
+  background: #e71a0f;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin-top: 20px;
+}
+
+.select-seats-btn:hover:not(:disabled) {
+  background: #c4180d;
+}
+
+.select-seats-btn:disabled {
+  background: #d1d5db;
+  cursor: not-allowed;
+}
+
+/* Seat Status Styles */
+.seat-status {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 16px;
+  margin: 16px 0;
+}
+
+.status-info {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.status-item {
+  font-size: 0.9rem;
+  color: #374151;
+}
+
+.status-message {
+  text-align: center;
+  font-weight: 600;
+  color: #6b7280;
+  margin-bottom: 12px;
+}
+
+.status-message.complete {
+  color: #059669;
+}
+
+.btn.secondary {
+  background: #f3f4f6;
+  color: #374151;
+  border: 1px solid #d1d5db;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.btn.secondary:hover {
+  background: #e5e7eb;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+
+@media (max-width: 480px) {
+  .seat-modal {
+    width: 95%;
+    margin: 20px;
+  }
+  
+  .seat-numbers {
+    gap: 8px;
+  }
+  
+  .seat-number-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+  
+  
+  .status-info {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+}
+

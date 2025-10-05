@@ -1,0 +1,56 @@
+<nav class="navbar">
+  <!-- Left Logo -->
+  <div class="navbar-brand">
+    <h1>🎬 ShowTime</h1>
+  </div>
+
+  <!-- Center Navigation -->
+  <div class="navbar-menu">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a routerLink="/" routerLinkActive="active" class="nav-link">
+          <span class="nav-icon">🏠</span>
+          Home
+        </a>
+      </li>
+      <li class="nav-item">
+        <a [routerLink]="'/booking'" [queryParams]="{ movieId: 3 }" routerLinkActive="active" class="nav-link">
+          <span class="nav-icon">🎬</span>
+          Movies
+        </a>
+      </li>
+      <li class="nav-item">
+        <a routerLink="/theatres" routerLinkActive="active" class="nav-link">
+          <span class="nav-icon">🏢</span>
+          Theatres
+        </a>
+      </li>
+      <li class="nav-item">
+        <a routerLink="/my-bookings" routerLinkActive="active" class="nav-link">
+          <span class="nav-icon">🎫</span>
+          My Bookings
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Right Admin Button -->
+  <div class="navbar-actions">
+    <ng-container *ngIf="(isAuthenticated$ | async); else loggedOut">
+      <button (click)="logout()" class="admin-btn">
+        <span class="nav-icon">🚪</span>
+        Logout
+      </button>
+    </ng-container>
+    <ng-template #loggedOut>
+      <a routerLink="/login" class="admin-btn">
+        <span class="nav-icon">🔐</span>
+        Login
+      </a>
+      <a routerLink="/signup" class="admin-btn" style="margin-left:8px;">
+        <span class="nav-icon">📝</span>
+        Sign up
+      </a>
+    </ng-template>
+  </div>
+</nav>

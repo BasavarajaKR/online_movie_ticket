@@ -1,0 +1,56 @@
+<app-navbar></app-navbar>
+<div class="payment-container">
+  <div class="summary" *ngIf="summary as s">
+    <h3>Booking Summary</h3>
+    <div class="row">
+      <div class="col">
+        <div><strong>{{ s.movie.title }}</strong></div>
+        <div>{{ s.theatre.screen }} • {{ s.show.date }} • {{ s.show.time }}</div>
+        <div>Seats: {{ seatsLabel(s) }}</div>
+      </div>
+      <div class="col right">
+        <div><strong>Total: ₹{{ s.totalAmount }}</strong></div>
+      </div>
+    </div>
+  </div>
+  <div class="payment-card">
+    <div class="header">
+      <h2>Complete Payment</h2>
+      <div class="methods">
+        <button class="tab" [class.active]="method==='upi'" (click)="setMethod('upi')">UPI</button>
+        <button class="tab" [class.active]="method==='card'" (click)="setMethod('card')">Card</button>
+      </div>
+    </div>
+
+    <div class="content" *ngIf="method==='upi'">
+      <label class="label" for="upiId">UPI ID</label>
+      <input id="upiId" class="input" placeholder="example@upi" [(ngModel)]="upi.id" required>
+      <div class="hint">Pay using any UPI app (GPay, PhonePe, Paytm, BHIM)</div>
+    </div>
+
+    <div class="content" *ngIf="method==='card'">
+      <label class="label" for="cardName">Name on card</label>
+      <input id="cardName" class="input" placeholder="Full name" [(ngModel)]="card.name" required>
+
+      <label class="label" for="cardNumber">Card number</label>
+      <input id="cardNumber" class="input" placeholder="1234 5678 9012 3456" [(ngModel)]="card.number" (input)="formatCardNumber()" required>
+
+      <div class="row">
+        <div class="col">
+          <label class="label" for="expiry">Expiry (MM/YY)</label>
+          <input id="expiry" class="input" placeholder="MM/YY" [(ngModel)]="card.expiry" required>
+        </div>
+        <div class="col">
+          <label class="label" for="cvv">CVV</label>
+          <input id="cvv" class="input" placeholder="***" [(ngModel)]="card.cvv" type="password" maxlength="4" required>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <button class="pay-btn" [disabled]="isProcessing || (method==='upi' && !isUpiValid) || (method==='card' && !isCardValid)" (click)="submit()">
+        {{ isProcessing ? 'Processing…' : 'Pay Now' }}
+      </button>
+    </div>
+  </div>
+</div>

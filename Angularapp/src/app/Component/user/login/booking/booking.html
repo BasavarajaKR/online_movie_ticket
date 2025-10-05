@@ -1,0 +1,200 @@
+<app-navbar></app-navbar>
+<div class="booking-container">
+  <!-- <div class="booking-header">
+    <h2>Movie Booking</h2>
+    <div class="user-info">
+      <span>Welcome, {{ currentUser }}</span>
+      <button (click)="logout()" class="logout-btn">Logout</button>
+    </div>
+  </div> -->
+
+  <div class="booking-content">
+    <!-- Movie Selection -->
+    <div class="movie-selection">
+      <div class="movie-head">
+        <h3>Select Movie</h3>
+        <div class="filters-bar">
+          <button class="filter-chip" [class.active]="selectedLanguage==='All'" (click)="setLanguage('All')">All</button>
+          <button class="filter-chip" *ngFor="let lang of languages" [class.active]="selectedLanguage===lang" (click)="setLanguage(lang)">{{ lang }}</button>
+        </div>
+      </div>
+      <div class="movie-grid">
+        <div *ngFor="let movie of pagedMovies" 
+             class="movie-card" 
+             [class.selected]="selectedMovie?.movieId === movie.movieId"
+             (click)="onCardClick(movie)">
+          <div class="poster-wrap">
+            <img [src]="movie.poster" [alt]="movie.title" class="movie-poster" (error)="onImageError($event, movie)">
+            <div class="rating-strip">
+              <span class="star">★</span>
+              <span class="score">{{ movie.rating }}/10</span>
+              <span class="votes">{{ (movie.rating * 1000) | number:'1.0-0' }}K Votes</span>
+            </div>
+          </div>
+          <div class="card-overlay" (click)="$event.stopPropagation()">
+            <button class="book-now-btn" (click)="bookNow(movie); $event.stopPropagation()">Book Now</button>
+          </div>
+          <h4 class="movie-title">{{ movie.title }}</h4>
+          <div class="subtext">{{ movie.genre }}</div>
+        </div>
+      </div>
+
+      <!-- Details Modal -->
+      <div class="modal-backdrop" *ngIf="showDetails" (click)="closeDetails()"></div>
+      <div class="modal" *ngIf="showDetails">
+        <div class="modal-header">
+          <h3>{{ detailsMovie?.title }}</h3>
+          <button class="close" (click)="closeDetails()">×</button>
+        </div>
+        <div class="modal-body">
+          <img *ngIf="detailsMovie" [src]="detailsMovie.poster" [alt]="detailsMovie.title">
+          <div class="modal-info">
+            <p>{{ detailsMovie?.description }}</p>
+            <p><strong>Genre:</strong> {{ detailsMovie?.genre }}</p>
+            <p><strong>Duration:</strong> {{ detailsMovie?.duration }} min</p>
+            <p><strong>Release Date:</strong> {{ detailsMovie?.releaseDate | date:'MMM dd, yyyy' }}</p>
+            <p><strong>Director:</strong> {{ detailsMovie?.director }}</p>
+            <p><strong>Cast:</strong> {{ detailsMovie?.cast }}</p>
+            <p><strong>Rating:</strong> ⭐ {{ detailsMovie?.rating }}/10</p>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="page-btn" (click)="closeDetails()">Close</button>
+        </div>
+      </div>
+      <div class="pagination" *ngIf="totalPages > 1">
+        <button class="page-btn" (click)="prevPage()">Prev</button>
+        <button class="page-btn" *ngFor="let p of pages" [class.active]="p===currentPage" (click)="goToPage(p)">{{ p }}</button>
+        <button class="page-btn" (click)="nextPage()">Next</button>
+      </div>
+    </div>
+
+    <!-- Showtime Selection (inline) - theatres first, then times -->
+    <div class="showtime-selection" *ngIf="selectedMovie">
+      <h3>Select Theatre & Time</h3>
+      <div class="theatre-hint" *ngIf="availableTheatres.length > 0">Available Theatres:</div>
+      <div class="theatre-tags" *ngIf="availableTheatres.length > 0">
+        <span class="chip" *ngFor="let t of availableTheatres" (click)="chooseTheatre(t)" [class.active]="t===selectedTheatreName">{{ t }}</span>
+      </div>
+      <div class="showtime-grid" *ngIf="selectedTheatreName">
+        <div *ngFor="let st of theatreTimes" 
+             class="showtime-card"
+             (click)="chooseShowtime({time: st.time, theater: st.screen, price: st.price})">
+          <span class="time">{{ st.time }}</span>
+          <span class="theater">{{ st.screen }}</span>
+          <span class="price">₹{{ st.price }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Inline seat selection removed; using modal only -->
+
+    <!-- Booking Summary -->
+    <div class="booking-summary" *ngIf="selectedSeats.length > 0">
+      <h3>Booking Summary</h3>
+      <div class="summary-content">
+        <div class="movie-info">
+          <h4>{{ selectedMovie?.title }}</h4>
+          <p>{{ selectedShowtime?.theater }} - {{ selectedShowtime?.time }}</p>
+        </div>
+        <div class="seats-info">
+          <h4>Selected Seats:</h4>
+          <div class="selected-seats">
+            <span *ngFor="let seat of selectedSeats" class="seat-tag">
+              {{ seat.row }}{{ seat.number }}
+            </span>
+          </div>
+        </div>
+        <div class="price-info">
+          <p>Total: ₹{{ getTotalPrice() }}</p>
+        </div>
+        <button class="book-btn" (click)="proceedToPayment()">Proceed to Payment</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Seat Count Modal -->
+<div class="modal-backdrop" *ngIf="showSeatCountModal" (click)="cancelSeatCount()"></div>
+<div class="modal seatcount-modal" *ngIf="showSeatCountModal">
+  <div class="modal-header">
+    <h3>Select number of seats</h3>
+    <button class="close" (click)="cancelSeatCount()">×</button>
+  </div>
+  <div class="modal-body">
+    <input type="number" min="1" max="20" [(ngModel)]="tempSeatCount" />
+  </div>
+  <div class="modal-footer">
+    <button class="page-btn" (click)="confirmSeatCount()">Confirm</button>
+    <button class="page-btn" (click)="cancelSeatCount()">Cancel</button>
+  </div>
+  
+</div>
+
+<!-- Showtime Modal -->
+<div class="modal-backdrop" *ngIf="showShowtimeModal" (click)="showShowtimeModal=false"></div>
+<div class="modal seat-select-modal" *ngIf="showShowtimeModal">
+  <div class="modal-header">
+    <h3>Select theatre & time</h3>
+    <button class="close" (click)="showShowtimeModal=false">×</button>
+  </div>
+  <div class="modal-body">
+    <div class="seat-count">
+      <span>Seats: {{ numberOfSeatsToSelect }}</span>
+    </div>
+    <div class="theatre-hint" *ngIf="availableTheatres.length > 0">Available Theatres:</div>
+    <div class="theatre-tags" *ngIf="availableTheatres.length > 0">
+      <span class="chip" *ngFor="let t of availableTheatres" (click)="chooseTheatre(t)" [class.active]="t===selectedTheatreName">{{ t }}</span>
+    </div>
+
+    <div class="showtime-grid" *ngIf="selectedTheatreName">
+      <div *ngFor="let st of theatreTimes" 
+           class="showtime-card"
+           (click)="chooseShowtime({time: st.time, theater: st.screen, price: st.price})">
+        <span class="time">{{ st.time }}</span>
+        <span class="theater">{{ st.screen }}</span>
+        <span class="price">₹{{ st.price }}</span>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="page-btn" (click)="showShowtimeModal=false">Close</button>
+  </div>
+</div>
+
+<!-- Seat Selection Modal -->
+<div class="modal-backdrop" *ngIf="showSeatSelectionModal" (click)="showSeatSelectionModal=false"></div>
+<div class="modal seat-select-modal" *ngIf="showSeatSelectionModal">
+  <div class="modal-header">
+    <h3>Select Seats</h3>
+    <button class="close" (click)="showSeatSelectionModal=false">×</button>
+  </div>
+  <div class="modal-body">
+    <div class="seat-count">
+      <span>Seats to select: {{ numberOfSeatsToSelect }}</span>
+      <span class="remain" *ngIf="isSeatCountSet">Remaining: {{ remainingSeats }}</span>
+    </div>
+    <div class="seat-map">
+      <div class="screen">SCREEN</div>
+      <div class="seats-grid">
+        <div *ngFor="let row of seatRows" class="seat-row">
+          <span class="row-label">{{ row.letter }}</span>
+          <div class="seats">
+            <div *ngFor="let seat of row.seats" 
+                 class="seat"
+                 [class.occupied]="seat.occupied"
+                 [class.selected]="isSeatSelected(seat)"
+                 (click)="toggleSeat(seat)">
+              {{ seat.number }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <div class="left-info">Selected: {{ totalSelectedSeats }}/{{ numberOfSeatsToSelect }}</div>
+    <button class="page-btn" (click)="proceedToPayment()" [disabled]="remainingSeats>0">Proceed to Payment</button>
+    <button class="page-btn" (click)="showSeatSelectionModal=false">Close</button>
+  </div>
+</div>

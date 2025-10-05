@@ -1,0 +1,17 @@
+.payment-container{min-height:calc(100vh - 70px);display:grid;place-items:center;padding:24px;background:radial-gradient(1200px 800px at 10% -20%, #0f0f0f 0%, #0b0b0b 40%, #090909 70%, #080808 100%)}
+.payment-card{width:min(720px,92vw);background:linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%);border:1px solid rgba(255,255,255,0.08);border-radius:16px;box-shadow:0 24px 60px rgba(0,0,0,0.5);padding:18px;color:#e5e7eb;font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif}
+.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.header h2{margin:0;font-weight:900}
+.methods{display:flex;gap:8px}
+.tab{background:rgba(255,255,255,0.06);color:#e5e7eb;border:1px solid rgba(255,255,255,0.14);border-radius:10px;padding:8px 12px;font-weight:800;cursor:pointer}
+.tab.active{background:#111827}
+.content{display:block;margin-top:10px}
+.label{display:block;margin:10px 0 6px 0;font-weight:800;color:#cbd5e1}
+.input{width:100%;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.14);background:rgba(255,255,255,0.06);color:#fff;font-weight:700}
+.hint{margin-top:6px;color:#9ca3af;font-weight:700}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.col{display:block}
+.footer{display:flex;justify-content:flex-end;margin-top:16px}
+.pay-btn{background:linear-gradient(135deg,#22c55e 0%, #16a34a 100%);color:#fff;border:1px solid rgba(255,255,255,0.18);padding:12px 18px;border-radius:12px;font-weight:900;cursor:pointer;box-shadow:0 12px 28px rgba(22,163,74,0.28)}
+.pay-btn[disabled]{opacity:.7;cursor:not-allowed}
+

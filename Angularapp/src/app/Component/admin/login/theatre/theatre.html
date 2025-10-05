@@ -1,0 +1,114 @@
+<app-admin-layout>
+  <div class="theatre-management">
+    <div class="theatre-header">
+      <h1>Theatre Management</h1>
+      <p>Manage theatres, screens, and locations</p>
+      <button class="btn-add-theatre" (click)="toggleAddTheatreForm()">
+        <span class="btn-icon">➕</span>
+        Add New Theatre
+      </button>
+    </div>
+
+    <!-- Add Theatre Form -->
+    <div class="add-theatre-form" *ngIf="showAddTheatreForm">
+      <h3>Add New Theatre</h3>
+      <div class="form-group">
+        <label for="theatreName">Theatre Name</label>
+        <input 
+          type="text" 
+          id="theatreName" 
+          [(ngModel)]="newTheatre.name" 
+          placeholder="Enter theatre name"
+          class="form-input">
+      </div>
+      <div class="form-group">
+        <label for="theatrePlace">Location</label>
+        <input 
+          type="text" 
+          id="theatrePlace" 
+          [(ngModel)]="newTheatre.place" 
+          placeholder="Enter theatre location"
+          class="form-input">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="screens">Number of Screens</label>
+          <input 
+            type="number" 
+            id="screens" 
+            [(ngModel)]="newTheatre.screens" 
+            placeholder="0"
+            class="form-input">
+        </div>
+        <div class="form-group">
+          <label for="capacity">Total Capacity</label>
+          <input 
+            type="number" 
+            id="capacity" 
+            [(ngModel)]="newTheatre.capacity" 
+            placeholder="0"
+            class="form-input">
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn-save" (click)="addTheatre()">Save Theatre</button>
+        <button class="btn-cancel" (click)="toggleAddTheatreForm()">Cancel</button>
+      </div>
+    </div>
+
+    
+    <div class="theatre-grid">
+      <div class="theatre-card" *ngFor="let theatre of theatres">
+        <div class="theatre-icon">🏢</div>
+        <div class="theatre-info">
+          <h3>{{ theatre.name }}</h3>
+          <p class="theatre-location">{{ theatre.place }}</p>
+          <div class="theatre-details">
+            <span class="detail-item">Screens: {{ theatre.screens }}</span>
+            <span class="detail-item">Capacity: {{ theatre.capacity }}</span>
+          </div>
+          
+          <!-- Inline Add Movie Form for this theatre -->
+          <div class="inline-add-movie" *ngIf="showAddMovieForm && selectedTheatreId === theatre.id">
+            <div class="form-group">
+              <label for="movieName-{{theatre.id}}">Movie Name</label>
+              <input 
+                type="text" 
+                id="movieName-{{theatre.id}}" 
+                [(ngModel)]="newMovie" 
+                placeholder="Enter movie name"
+                class="form-input">
+            </div>
+            <div class="form-actions">
+              <button class="btn-save" (click)="addMovieToTheatre()">Add Movie</button>
+              <button class="btn-cancel" (click)="toggleAddMovieForm(0)">Cancel</button>
+            </div>
+          </div>
+          
+          <!-- Movies Section -->
+          <div class="movies-section">
+            <h4>Movies in this Theatre:</h4>
+            <div class="movies-list" *ngIf="theatre.movies.length > 0; else noMovies">
+              <div class="movie-item" *ngFor="let movie of theatre.movies; let i = index">
+                <span class="movie-name">{{ movie }}</span>
+                <button class="btn-remove-movie" (click)="removeMovieFromTheatre(theatre.id, i)">×</button>
+              </div>
+            </div>
+            <ng-template #noMovies>
+              <p class="no-movies">No movies added yet</p>
+            </ng-template>
+          </div>
+        </div>
+        
+        <div class="theatre-actions">
+          <button class="btn-add-movie" (click)="toggleAddMovieForm(theatre.id)">
+            <span class="btn-icon">🎬</span>
+            Add Movies
+          </button>
+          <button class="btn-edit" (click)="editTheatre(theatre)">Edit</button>
+          <button class="btn-delete" (click)="deleteTheatre(theatre)">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-admin-layout>

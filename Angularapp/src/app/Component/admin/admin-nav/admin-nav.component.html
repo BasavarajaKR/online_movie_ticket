@@ -1,0 +1,42 @@
+<nav class="admin-nav" *ngIf="isAuthenticated$ | async">
+  <div class="nav-container">
+    <div class="nav-brand">
+      <h2>Admin Panel</h2>
+    </div>
+    
+    <div class="nav-links">
+      <button class="nav-link" (click)="navigateTo('dashboard')" [class.active]="isActiveRoute('/admin')">
+        <i class="icon">🏠</i>
+        <span>Dashboard</span>
+      </button>
+      <button class="nav-link" (click)="navigateTo('movie')" [class.active]="isActiveRoute('/admin/movie')">
+        <i class="icon">🎬</i>
+        <span>Movies</span>
+      </button>
+      <button class="nav-link" (click)="navigateTo('theatre')" [class.active]="isActiveRoute('/admin/theatre')">
+        <i class="icon">🏢</i>
+        <span>Theatres</span>
+      </button>
+      <button class="nav-link" (click)="navigateTo('booking')" [class.active]="isActiveRoute('/admin/booking')">
+        <i class="icon">🎫</i>
+        <span>Bookings</span>
+      </button>
+      <button class="nav-link" (click)="navigateTo('payment')" [class.active]="isActiveRoute('/admin/payment')">
+        <i class="icon">💳</i>
+        <span>Payments</span>
+      </button>
+      <button class="nav-link" (click)="navigateTo('user')" [class.active]="isActiveRoute('/admin/user')">
+        <i class="icon">👥</i>
+        <span>Users</span>
+      </button>
+    </div>
+    
+    <div class="nav-user">
+      <span class="user-name">Welcome, {{ (currentUser$ | async)?.username }}</span>
+      <button class="logout-btn" (click)="logout()">
+        <i class="icon">🚪</i>
+        <span>Logout</span>
+      </button>
+    </div>
+  </div>
+</nav>
